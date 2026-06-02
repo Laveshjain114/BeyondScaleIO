@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beyond Scale | AI Automation Agency</title>
+    <style>
+        /* --- DESIGN SYSTEM & VARIABLES --- */
+        :root[data-theme="dark"] {
+            --bg-main: #020617;
+            --bg-surface: rgba(15, 23, 42, 0.6);
+            --bg-card: #0f172a;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --primary: #2563eb;
+            --accent: #06b6d4;
+            --accent-glow: rgba(6, 182, 212, 0.15);
+            --success: #10b981;
+            --hero-gradient: radial-gradient(circle at 50% -20%, rgba(37, 99, 235, 0.15), transparent 50%);
+        }
+
+        :root[data-theme="light"] {
+            --bg-main: #f8fafc;
+            --bg-surface: rgba(255, 255, 255, 0.7);
+            --bg-card: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: rgba(15, 23, 42, 0.08);
+            --primary: #2563eb;
+            --accent: #06b6d4;
+            --accent-glow: rgba(6, 182, 212, 0.05);
+            --success: #10b981;
+            --hero-gradient: radial-gradient(circle at 50% -20%, rgba(37, 99, 235, 0.05), transparent 50%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* --- UTILITIES & LAYOUT --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        section {
+            padding: 8rem 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 700px;
+            margin: 0 auto 4rem auto;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.125rem;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        [data-theme="light"] .gradient-text {
+            background: linear-gradient(135deg, #0f172a 30%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* --- BUTTONS --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: #ffffff;
+            border: 1px solid transparent;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: var(--bg-surface);
+            color: var(--text-main);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(8px);
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border);
+            transform: translateY(-1px);
+        }
+
+        /* --- GLASS CARD STYLE --- */
+        .glass-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(12px);
+            border-radius: 12px;
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+            border-color: rgba(6, 182, 212, 0.3);
+        }
+
+        /* --- NAVBAR --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 100;
+            background: rgba(2, 6, 23, 0.7);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            transition: background 0.3s;
+        }
+        [data-theme="light"] nav {
+            background: rgba(248, 250, 252, 0.7);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 4.5rem;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover {
+            color: var(--text-main);
+        }
+
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-main);
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        /* --- HERO --- */
+        .hero-section {
+            background: var(--hero-gradient);
+            padding-top: 10rem;
+            padding-bottom: 6rem;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            background: var(--accent-glow);
+            border: 1px solid rgba(6, 182, 212, 0.3);
+            padding: 0.4rem 1rem;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 2rem;
+        }
+
+        .hero-section h1 {
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: -0.05em;
+            line-height: 1.1;
+            max-width: 900px;
+            margin: 0 auto 1.5rem auto;
+        }
+
+        .hero-section p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto 2.5rem auto;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 5rem;
+        }
+
+        /* --- HERO DASHBOARD VISUAL --- */
+        .hero-visual {
+            max-width: 1000px;
+            margin: 0 auto;
+            border-radius: 16px;
+            background: #0b1329;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            text-align: left;
+        }
+
+        .dash-main {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .dash-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+
+        .dash-card h4 { font-size: 0.85rem; color: #64748b; margin-bottom: 0.5rem; text-transform: uppercase;}
+        .dash-card .metric { font-size: 1.75rem; font-weight: 700; color: #fff;}
+        .dash-card .sub-metric { font-size: 0.8rem; color: var(--success); }
+
+        .dash-chat {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            font-size: 0.85rem;
+        }
+
+        .chat-bubble {
+            padding: 0.6rem 0.8rem;
+            border-radius: 8px;
+            max-width: 85%;
+        }
+        .chat-bubble.bot { background: var(--primary); color: white; align-self: flex-start; }
+        .chat-bubble.user { background: rgba(255,255,255,0.1); color: white; align-self: flex-end; }
+
+        /* --- TRUST SECTION --- */
+        .industry-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .industry-card {
+            text-align: center;
+            padding: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* --- SERVICES --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .services-card h3 {
+            margin: 1rem 0;
+            font-size: 1.35rem;
+        }
+
+        .services-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- HOW IT WORKS --- */
+        .timeline {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            position: relative;
+        }
+
+        .step-card {
+            position: relative;
+        }
+
+        .step-num {
+            font-size: 3.5rem;
+            font-weight: 900;
+            color: var(--border);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- BENEFITS --- */
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        .benefit-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .benefit-icon {
+            background: var(--accent-glow);
+            color: var(--accent);
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+
+        /* --- CASE STUDIES --- */
+        .case-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem;
+        }
+
+        .case-card .metrics-display {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .case-stat {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--success);
+        }
+
+        /* --- AUTOMATION SHOWCASE --- */
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        /* --- TESTIMONIALS --- */
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .avatar {
+            width: 3rem;
+            height: 3rem;
+            border-radius: 50%;
+            background: var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .stars { color: #f59e0b; margin-bottom: 0.5rem; }
+
+        /* --- FAQ --- */
+        .faq-max {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        details {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.5rem;
+        }
+
+        summary {
+            font-weight: 600;
+            cursor: pointer;
+            outline: none;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: '＋'; color: var(--accent); font-weight: bold;}
+        details[open] summary::after { content: '－'; }
+
+        details p {
+            margin-top: 1rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* --- CTA SECTION --- */
+        .final-cta {
+            text-align: center;
+            background: linear-gradient(180deg, transparent, rgba(37,99,235,0.05));
+        }
+
+        .final-cta h2 { font-size: 3rem; font-weight: 800; margin-bottom: 1rem; }
+
+        /* --- FOOTER --- */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 4rem 0;
+            background: var(--bg-main);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .footer-col h4 { font-size: 0.9rem; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.05em;}
+        .footer-col ul { list-style: none; }
+        .footer-col ul li { margin-bottom: 0.5rem; }
+        .footer-col ul li a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: color 0.2s;}
+        .footer-col ul li a:hover { color: var(--text-main); }
+
+        /* --- RESPONSIVE DESIGN --- */
+        @media (max-width: 1024px) {
+            .services-grid, .showcase-grid, .testimonial-grid { grid-template-columns: repeat(2, 1fr); }
+            .industry-grid { grid-template-columns: repeat(3, 1fr); }
+            .timeline { grid-template-columns: repeat(2, 1fr); }
+            .hero-section h1 { font-size: 3rem; }
+        }
+
+        @media (max-width: 768px) {
+            .services-grid, .showcase-grid, .testimonial-grid, .industry-grid, .timeline, .case-grid, .benefits-grid, .hero-visual {
+                grid-template-columns: 1fr;
+            }
+            .nav-links { display: none; }
+            .hero-section h1 { font-size: 2.5rem; }
+            .footer-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- --- NAVIGATION --- -->
+    <nav>
+        <div class="container nav-container">
+            <div class="logo">▲ Beyond <span>Scale</span></div>
+            <div class="nav-links">
+                <a href="#services">Services</a>
+                <a href="#industries">Industries</a>
+                <a href="#how-it-works">Process</a>
+                <a href="#case-studies">Results</a>
+                <button class="theme-toggle" id="themeBtn" aria-label="Toggle Theme">🌙</button>
+                <a href="#contact" class="btn btn-primary">Book Free Call</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- --- HERO SECTION --- -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-badge">Next-Gen AI Automation Studio</div>
+            <h1 class="gradient-text">Turn Missed Opportunities Into Revenue With AI Automation</h1>
+            <p>We build AI-powered systems that answer leads instantly, book appointments automatically, and streamline operations so your business can scale faster.</p>
+            <div class="hero-ctas">
+                <a href="#contact" class="btn btn-primary">Book Free Strategy Call</a>
+                <a href="#demo" class="btn btn-secondary">Watch Demo</a>
+            </div>
+
+            <!-- Dashboard Mockup Visual -->
+            <div class="hero-visual">
+                <div class="dash-main">
+                    <div class="dash-card">
+                        <h4>Missed Call Recovery</h4>
+                        <div class="metric">94.2%</div>
+                        <div class="sub-metric">▲ 14% this month</div>
+                    </div>
+                    <div class="dash-card">
+                        <h4>AI Appointments Booked</h4>
+                        <div class="metric">382</div>
+                        <div class="sub-metric">Seamless routing</div>
+                    </div>
+                    <div class="dash-card">
+                        <h4>CRM Pipeline Value</h4>
+                        <div class="metric">$148,900</div>
+                        <div class="sub-metric">Automated updates</div>
+                    </div>
+                    <div class="dash-card">
+                        <h4>Time Saved</h4>
+                        <div class="metric">42 hrs / wk</div>
+                        <div class="sub-metric">Zero operational lag</div>
+                    </div>
+                </div>
+                <div class="dash-chat">
+                    <div class="chat-bubble bot">Hello! I noticed we missed your call. Ready to book your consultation for tomorrow?</div>
+                    <div class="chat-bubble user">Yes, please! Does 2 PM work?</div>
+                    <div class="chat-bubble bot">Perfect. Confirmed for 2 PM. Adding to your calendar now.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- TRUST SECTION --- -->
+    <section id="industries">
+        <div class="container">
+            <div class="section-header">
+                <h2>Automation That Works Across Industries</h2>
+                <p>Tailored systems configured precisely for your industry workflows.</p>
+            </div>
+            <div class="industry-grid">
+                <div class="glass-card industry-card">Healthcare & MedSpas</div>
+                <div class="glass-card industry-card">Real Estate Agencies</div>
+                <div class="glass-card industry-card">Legal & Law Firms</div>
+                <div class="glass-card industry-card">Home Services & Roofing</div>
+                <div class="glass-card industry-card">Fitness Centers & Gyms</div>
+                <div class="glass-card industry-card">Marketing Agencies</div>
+                <div class="glass-card industry-card">Consulting & Coaching</div>
+                <div class="glass-card industry-card">E-commerce Brands</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- SERVICES SECTION --- -->
+    <section id="services">
+        <div class="container">
+            <div class="section-header">
+                <h2>AI Systems Built To Save Time And Increase Revenue</h2>
+                <p>Stop losing qualified pipelines to manual delay limitations.</p>
+            </div>
+            <div class="services-grid">
+                <div class="glass-card services-card">
+                    <div class="benefit-icon">📞</div>
+                    <h3>AI Missed Call Recovery</h3>
+                    <p>Automatically text callers back instantly, moving missed conversations straight into booked calendar meetings.</p>
+                </div>
+                <div class="glass-card services-card">
+                    <div class="benefit-icon">📅</div>
+                    <h3>AI Appointment Booking</h3>
+                    <p>Allow multi-channel scheduling without manual coordination, calendar checking, or timezone errors.</p>
+                </div>
+                <div class="glass-card services-card">
+                    <div class="benefit-icon">🎯</div>
+                    <h3>AI Lead Qualification</h3>
+                    <p>Qualify inbound parameters safely and automatically before they ever scale up to your internal sales staff.</p>
+                </div>
+                <div class="glass-card services-card">
+                    <div class="benefit-icon">💬</div>
+                    <h3>AI Chatbots</h3>
+                    <p>24/7 web assistants context-optimized to handle custom documentation and capture traffic safely overnight.</p>
+                </div>
+                <div class="glass-card services-card">
+                    <div class="benefit-icon">🔄</div>
+                    <h3>CRM Automation</h3>
+                    <p>Keep your contact records seamlessly scrubbed, updated, and progressively moving through logic sequences.</p>
+                </div>
+                <div class="glass-card services-card">
+                    <div class="benefit-icon">⚡</div>
+                    <h3>Workflow Automation</h3>
+                    <p>Connect core native cloud applications to fully eliminate administrative formatting and human keystroke errors.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- HOW IT WORKS --- -->
+    <section id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Architecture Deployment Strategy</h2>
+                <p>How we design, configure, and install bespoke operational infrastructure.</p>
+            </div>
+            <div class="timeline">
+                <div class="step-card">
+                    <div class="step-num">01</div>
+                    <h4>Business Audit</h4>
+                    <p style="color: var(--text-muted); font-size:0.9rem;">We map operational bottlenecks, leakage channels, and heavy manual cost lines.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">02</div>
+                    <h4>Custom Architecture</h4>
+                    <p style="color: var(--text-muted); font-size:0.9rem;">Designing customized workflows to optimize response times and team overhead parameters.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">03</div>
+                    <h4>Implementation</h4>
+                    <p style="color: var(--text-muted); font-size:0.9rem;">Sandboxed infrastructure creation and extensive edge-case system testing protocols.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-num">04</div>
+                    <h4>Launch & Scale</h4>
+                    <p style="color: var(--text-muted); font-size:0.9rem;">Full automated execution paired with ongoing algorithmic tuning metrics.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- BENEFITS SECTION --- -->
+    <section>
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Enterprise Teams Choose Beyond Scale</h2>
+                <p>Engineered foundations built to remove operational fragility.</p>
+            </div>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">✓</div>
+                    <div>
+                        <h4>Respond to Leads in Seconds</h4>
+                        <p style="color: var(--text-muted);">Beat the standard industry drop-off drop rates by resolving conversations instantly.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">✓</div>
+                    <div>
+                        <h4>Never Miss Opportunities</h4>
+                        <p style="color: var(--text-muted);">Ensure 100% data ingestion coverage across lines, weekends, and holidays.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">✓</div>
+                    <div>
+                        <h4>Reduce Administrative Work</h4>
+                        <p style="color: var(--text-muted);">Transition expensive talent away from raw data movement and back into closing revenue.</p>
+                    </div>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">✓</div>
+                    <div>
+                        <h4>Increase Show Rates</h4>
+                        <p style="color: var(--text-muted);">Nurture customer attention seamlessly through contextual cross-channel reminders.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- CASE STUDIES --- -->
+    <section id="case-studies">
+        <div class="container">
+            <div class="section-header">
+                <h2>Proven Framework Integrations</h2>
+                <p>Review metrics collected across production-scale deployments.</p>
+            </div>
+            <div class="case-grid">
+                <div class="glass-card case-card">
+                    <span style="color:var(--accent); font-weight:700; font-size:0.85rem;">HOME SERVICES PARTNER</span>
+                    <h3 style="margin: 0.5rem 0;">Missed Calls Converted Automatically</h3>
+                    <p style="color:var(--text-muted);">Fitted an autonomous inbound logic engine to monitor drop channels outside standard call center shifts.</p>
+                    <div class="metrics-display">
+                        <div>
+                            <div class="case-stat">+34%</div>
+                            <div style="font-size:0.8rem; color:var(--text-muted);">Booking Delta</div>
+                        </div>
+                        <div>
+                            <div class="case-stat">18 hrs</div>
+                            <div style="font-size:0.8rem; color:var(--text-muted);">Weekly Staff Recouped</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card case-card">
+                    <span style="color:var(--accent); font-weight:700; font-size:0.85rem;">CLINICAL ENTERPRISE</span>
+                    <h3 style="margin: 0.5rem 0;">Speed-to-Lead Optimization Curve</h3>
+                    <p style="color:var(--text-muted);">Configured immediate multi-channel SMS parsing for raw inbound ad pipelines.</p>
+                    <div class="metrics-display">
+                        <div>
+                            <div class="case-stat">&lt; 4s</div>
+                            <div style="font-size:0.8rem; color:var(--text-muted);">Mean Response Time</div>
+                        </div>
+                        <div>
+                            <div class="case-stat">2.4x</div>
+                            <div style="font-size:0.8rem; color:var(--text-muted);">Pipeline Velocity Multiplier</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- AUTOMATIONS SHOWCASE --- -->
+    <section>
+        <div class="container">
+            <div class="section-header">
+                <h2>The Automation Suite Blueprint</h2>
+                <p>Plug-and-play architecture templates designed to handle execution overhead securely.</p>
+            </div>
+            <div class="showcase-grid">
+                <div class="glass-card"><h4>AI Receptionist</h4><p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.5rem;">Front-line parsing logic assets.</p></div>
+                <div class="glass-card"><h4>AI Voice Agent</h4><p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.5rem;">Natural, ultra-low latency conversational assets.</p></div>
+                <div class="glass-card"><h4>Lead Follow-Up System</h4><p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.5rem;">Persistent multi-touch context drip sequences.</p></div>
+                <div class="glass-card"><h4>Booking Assistant</h4><p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.5rem;">Calendar system data-mapping modules.</p></div>
+                <div class="glass-card"><h4>CRM Sync Nodes</h4><p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.5rem;">Cross-platform relational field synchronization.</p></div>
+                <div class="glass-card"><h4>Support Agents</h4><p style="color:var(--text-muted); font-size:0.9rem; margin-top:0.5rem;">Complex knowledge base vector query engines.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- TESTIMONIALS --- -->
+    <section>
+        <div class="container">
+            <div class="section-header">
+                <h2>Validated Operational Results</h2>
+                <p>Hear from clear industry founders driving modern scale structures.</p>
+            </div>
+            <div class="testimonial-grid">
+                <div class="glass-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"Beyond Scale took our chaotic real estate lead pipelines and completely locked them down. We booked 22 extra listings this month completely on autopilot."</p>
+                    <div class="profile">
+                        <div class="avatar">MD</div>
+                        <div>
+                            <h4>Marcus Vance</h4>
+                            <p style="color:var(--text-muted); font-size:0.8rem;">Founder, Vance Realty Group</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"We completely eliminated manual back-and-forth email loops. The AI appointment engine has saved our clinic group hundreds of support hours."</p>
+                    <div class="profile">
+                        <div class="avatar">SK</div>
+                        <div>
+                            <h4>Dr. Sarah Kim</h4>
+                            <p style="color:var(--text-muted); font-size:0.8rem;">Operations Director, Apex MedSpas</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <div class="stars">★★★★★</div>
+                    <p>"Our ad channels used to drop cold over weekends. Now our AI conversational agents capture and nurture opportunities within seconds of clicking."</p>
+                    <div class="profile">
+                        <div class="avatar">JH</div>
+                        <div>
+                            <h4>Jason H.</h4>
+                            <p style="color:var(--text-muted); font-size:0.8rem;">CEO, Elevate Marketing Group</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- FAQ SECTION --- -->
+    <section>
+        <div class="container">
+            <div class="section-header">
+                <h2>Frequently Asked Architecture Questions</h2>
+                <p>Everything you need to verify technical alignment.</p>
+            </div>
+            <div class="faq-max">
+                <details>
+                    <summary>How long does system implementation take?</summary>
+                    <p>Standard architectural blueprint construction takes between 14 to 21 business days depending on legacy data structural complexity.</p>
+                </details>
+                <details>
+                    <summary>Do I need to subscribe to special third-party software?</summary>
+                    <p>We build native integrations wherever possible. If middleware endpoints are required, we outline all software needs beforehand during your audit phase.</p>
+                </details>
+                <details>
+                    <summary>Which industries benefit most from your systems?</summary>
+                    <p>Any commercial enterprise processing dynamic inbound leads that requires rapid response time, calendar alignment, and high high-touch qualification loops.</p>
+                </details>
+                <details>
+                    <summary>What parameters are included in ongoing support?</summary>
+                    <p>We provide full proactive logic diagnostics, system latency testing, prompt alignment monitoring, and priority API maintenance updates.</p>
+                </details>
+                <details>
+                    <summary>Can you integrate natively with my legacy CRM?</summary>
+                    <p>Yes, we design complex custom workflows connecting into Salesforce, Hubspot, GoHighLevel, Close, and custom relational setups cleanly.</p>
+                </details>
+                <details>
+                    <summary>How much does a production automation framework cost?</summary>
+                    <p>Pricing scales precisely alongside scope footprint. We design tailored solutions mapping explicitly against targeted operational ROI metrics.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- FINAL CTA SECTION --- -->
+    <section id="contact" class="final-cta">
+        <div class="container">
+            <h2 class="gradient-text">Ready To Scale Without More Work?</h2>
+            <p style="color:var(--text-muted); max-width:600px; margin: 0 auto 2.5rem auto; font-size:1.15rem;">Book a free strategy call and discover how custom automation blueprints can transform your operational overhead.</p>
+            <div style="display:flex; gap:1rem; justify-content:center;">
+                <a href="#" class="btn btn-primary">Book Consultation</a>
+                <a href="#" class="btn btn-secondary">Get Started</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- FOOTER --- -->
+    <footer>
+        <div class="container footer-grid">
+            <div class="footer-col">
+                <div class="logo" style="margin-bottom:1rem;">▲ Beyond <span>Scale</span></div>
+                <p style="color:var(--text-muted); font-size:0.85rem;">Autonomous enterprise orchestration infrastructure. Engineered for structural scale.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Services</h4>
+                <ul>
+                    <li><a href="#">Missed Call Recovery</a></li>
+                    <li><a href="#">Appointment Booking</a></li>
+                    <li><a href="#">CRM Systems</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Industries</h4>
+                <ul>
+                    <li><a href="#">Healthcare</a></li>
+                    <li><a href="#">Real Estate</a></li>
+                    <li><a href="#">Home Services</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="#">Case Studies</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container" style="margin-top:4rem; padding-top:2rem; border-top:1px solid var(--border); text-align:center; font-size:0.85rem; color:var(--text-muted);">
+            &copy; 2026 Beyond Scale Solutions Inc. All assets engineered dynamically.
+        </div>
+    </footer>
+
+    <!-- --- THEME SWITCHER SCRIPT --- -->
+    <script>
+        const themeBtn = document.getElementById('themeBtn');
+        const root = document.documentElement;
+
+        themeBtn.addEventListener('click', () => {
+            const currentTheme = root.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            root.setAttribute('data-theme', newTheme);
+            themeBtn.textContent = newTheme === 'dark' ? '🌙' : '☀️';
+        });
+    </script>
+</body>
+</html>
